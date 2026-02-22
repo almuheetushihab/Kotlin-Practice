@@ -197,6 +197,12 @@ fun main() {
     )
 
     studentList.forEach { s ->
-        println("Student Name: ${s.name}, ID: ${s.id}, Grade: ${s.grade}, Section: ${s.section}")
+        println(
+            "Student Name: ${s.name}," +
+                    " Age: ${s.age}," +
+                    " ID: ${s.id}," +
+                    " Grade: ${s.grade}," +
+                    " Section: ${s.section}"
+        )
     }
 }
