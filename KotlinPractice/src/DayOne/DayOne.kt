@@ -33,6 +33,9 @@ data class Student(
     var religion: String = "",
 )
 
+
+
+
 fun main() {
     val student = Student().apply {
         name = "Almuheetu Shihab"
@@ -64,9 +67,7 @@ fun main() {
     val result = "Task Completed".also {
         println("Internal Log: $it")
     }
-
     println("Result : $result")
-
     println("\n--- 10 More Students for School Management System ---\n")
 
     val studentList = listOf(
