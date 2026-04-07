@@ -23,11 +23,32 @@ fun Int.isEven(): Boolean {
 //    this.visibility = View.VISIBLE
 //}
 
+fun String.makeLowerCase(): String {
+    return this.lowercase()
+}
+
+fun String.makeUpperCase(): String {
+    return this.uppercase()
+}
+
+fun String.isEmailValid(): Boolean {
+    return this.contains("@") && this.contains(".")
+}
+
+fun String.toIntOrDefault(default: Int = 0): Int {
+    return this.toIntOrNull() ?: default
+}
+
 fun main() {
     val name = "Shihab"
     val age = 24
+    val country = "bangladesh"
+    val uppercase = country.makeUpperCase()
+    val email = "almuheetu@gmail.com"
 
-
+    println(email.isEmailValid())
+    println(uppercase)
+    println(uppercase.makeLowerCase())
     println(name.addWelcome())
     println(age.isEven())
     println("Name: $name, Age: $age")
