@@ -2,12 +2,15 @@ package com.shihab.mvvmpracticeproject.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,18 +36,17 @@ import com.shihab.mvvmpracticeproject.model.User
 fun UserScreen(
     viewModel: UserViewModel = hiltViewModel()
 ) {
-    val userFromRoom by viewModel.userFromRoom.collectAsState()
-    val userFromDataStore by viewModel.userFromDataStore.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(uiState) {
-        if (uiState is UIState.Success) {
-            snackbarHostState.showSnackbar((uiState as UIState.Success).message)
-            viewModel.resetState()
-        } else if (uiState is UIState.Error) {
-            snackbarHostState.showSnackbar((uiState as UIState.Error).message)
-            viewModel.resetState()
+    LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
+        uiState.successMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearMessages()
+        }
+        uiState.errorMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearMessages()
         }
     }
 
@@ -60,56 +62,81 @@ fun UserScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "User Profile (MVVM + Clean)",
+                text = "User Profile Management",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Display Data from Room
-            UserCard(title = "From Room Database", user = userFromRoom)
+            UserCard(
+                title = "Room Database Status",
+                user = uiState.userFromRoom
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Display Data from DataStore
-            UserCard(title = "From DataStore", user = userFromDataStore)
+            UserCard(
+                title = "DataStore Status",
+                user = uiState.userFromDataStore
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = { viewModel.refreshUserFromServer() },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = uiState !is UIState.Loading
+                enabled = !uiState.isLoading
             ) {
-                if (uiState is UIState.Loading) {
+                if (uiState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.padding(end = 8.dp),
                         color = MaterialTheme.colorScheme.onPrimary,
                         strokeWidth = 2.dp
                     )
                 }
-                Text("Refresh from Server (Mock)")
+                Text("Sync from Server (GET/Update)")
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-            Button(
-                onClick = {
-                    viewModel.saveUserLocally(
-                        User("Shihab", "Android Engineer", 24)
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = {
+                        viewModel.saveOrUpdateUser(
+                            User(
+                                name = "Almuheetu Shihab",
+                                designation = "Android Engineer",
+                                age = 24
+                            )
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Add/Update")
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { viewModel.deleteUser() },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
                     )
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Save Manual Data to DataStore")
+                ) {
+                    Text("Delete User")
+                }
             }
         }
     }
 }
 
 @Composable
-fun UserCard(title: String, user: User?) {
+fun UserCard(
+    title: String,
+    user: User?
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp)
@@ -137,8 +164,8 @@ fun UserCard(title: String, user: User?) {
                 )
             } else {
                 Text(
-                    text = "No data found",
-                    color = MaterialTheme.colorScheme.error
+                    text = "No data found in this source",
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
         }

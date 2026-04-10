@@ -44,4 +44,12 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
             preferences[AGE] = user.age
         }
     }
+
+    suspend fun clearUser() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(NAME)
+            preferences.remove(DESIGNATION)
+            preferences.remove(AGE)
+        }
+    }
 }

@@ -18,24 +18,42 @@ class UserRepository @Inject constructor(
 ) {
 
     val userFromRoom: Flow<User?> = userDao.getUser().map { entity ->
-        entity?.let { User(it.name, it.designation, it.age) }
+        entity?.let {
+            User(
+                it.name,
+                it.designation,
+                it.age
+            )
+        }
     }
 
     val userFromDataStore: Flow<User?> = userPreferences.userFlow
 
     suspend fun refreshUser() {
-        try {
-            val user = apiService.getUserProfile()
-            // Save to Room
-            userDao.insertUser(UserEntity(name = user.name, designation = user.designation, age = user.age))
-            // Save to DataStore
-            userPreferences.saveUser(user)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val user = apiService.getUserProfile()
+        userDao.insertUser(
+            UserEntity(
+                name = user.name,
+                designation = user.designation,
+                age = user.age
+            )
+        )
+        userPreferences.saveUser(user)
     }
 
-    suspend fun saveUserToDataStore(user: User) {
+    suspend fun saveUser(user: User) {
+        userDao.insertUser(
+            UserEntity(
+                name = user.name,
+                designation = user.designation,
+                age = user.age
+            )
+        )
         userPreferences.saveUser(user)
+    }
+
+    suspend fun deleteUser() {
+        userDao.deleteUser()
+        userPreferences.clearUser()
     }
 }
