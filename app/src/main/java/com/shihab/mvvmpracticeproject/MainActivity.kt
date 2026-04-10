@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 Text(text = "Name: ${user.name}")
                 Text(text = "Age: ${user.age}")
+                Text(text = "Designation: ${user.designation}")
 
                 Spacer(modifier = Modifier.height(16.dp))
 

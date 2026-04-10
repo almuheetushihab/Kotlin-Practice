@@ -7,10 +7,22 @@ import kotlinx.coroutines.flow.StateFlow
 
 class UserViewModel : ViewModel() {
 
-    private val _userState = MutableStateFlow(User("Almuheetu Shihab", 24))
+    private val _userState =
+        MutableStateFlow(
+            User(
+                name = "MD. AL-MUHEETU",
+                designation = "Android Developer",
+                age = 24
+            )
+        )
 
     val userState: StateFlow<User> = _userState
     fun updateUserData() {
-        _userState.value = User("MD. AL-MUHEETU", 24)
+        _userState.value =
+            User(
+                name = "MD. AL-MUHEETU Shihab",
+                designation = "Student",
+                age = 24
+            )
     }
 }
