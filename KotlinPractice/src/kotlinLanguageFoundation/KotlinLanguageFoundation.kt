@@ -29,4 +29,26 @@ fun main() {
     println("Discount Eligible for : $isEligibleForDiscount")
     val stockStatus = if (stock > 0) "In Stock" else "Out of Stock"
     println(stockStatus)
+
+    //When expression
+    val paymentMethod = "CARD"
+    val processingFee = when(paymentMethod){
+        "CASH" -> 0.0
+        "BKASH", "NAGAD" -> 15.0
+        "CARD" -> 25.0
+        else -> {
+            println("Unknown Method")
+            0.0
+        }
+    }
+    println("Processing Fee: $processingFee")
+
+    // Loops and Ranges
+
+    //Ranges loop
+    for (i in 1..5 step 2){
+        println("Items count : $i")
+    }
+
+
 }
