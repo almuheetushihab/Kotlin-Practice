@@ -1,8 +1,9 @@
 package kotlinLanguageFoundation
 
+import java.io.StringReader
+
 val name = "Shihab"
 val experiance = 3
-
 
 
 fun main() {
@@ -32,7 +33,7 @@ fun main() {
 
     //When expression
     val paymentMethod = "CARD"
-    val processingFee = when(paymentMethod){
+    val processingFee = when (paymentMethod) {
         "CASH" -> 0.0
         "BKASH", "NAGAD" -> 15.0
         "CARD" -> 25.0
@@ -46,13 +47,32 @@ fun main() {
     // Loops and Ranges
 
     //Ranges loop
-    for (i in 1..5 step 2){
+    for (i in 1..5 step 2) {
         println("Items count : $i")
     }
 
     val cartItems = listOf("Laptop", "Mouse", "Keyboard")
-    for (item in cartItems){
+    for (item in cartItems) {
         println("Adding $item to cart")
     }
+// Null Safety
+    // Safe call Operator
+    val name: String? = null
+    println(name?.length)
 
+    // Elvis Operator
+    val myName: String? = null
+    val finalName = myName ?: "Guest"
+    println("Final Name: $finalName")
+
+    //Not-null Assertion (!!)
+    val lastName: String? = "Shihab"
+    println("Last Name Length: ${lastName!!.length}")
+
+    //Safe Cast (as?) and Smart Cast
+    val obj: Any? = "Hello"
+    val str: String? = "obj"
+    if (obj is String) {
+        println("Safe Cast as?: ${obj.length} ____str $str")
+    }
 }
