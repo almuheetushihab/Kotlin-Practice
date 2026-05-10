@@ -50,5 +50,9 @@ fun main() {
         println("Items count : $i")
     }
 
+    val cartItems = listOf("Laptop", "Mouse", "Keyboard")
+    for (item in cartItems){
+        println("Adding $item to cart")
+    }
 
 }
