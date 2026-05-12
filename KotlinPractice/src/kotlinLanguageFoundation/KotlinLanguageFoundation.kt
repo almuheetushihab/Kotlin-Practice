@@ -5,6 +5,14 @@ import java.io.StringReader
 val name = "Shihab"
 val experiance = 3
 
+// Function
+// সাধারণ ফাংশন
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
+
+// Single-expression function (প্রফেশনালরা এভাবেই লেখে)
+fun multiply(a: Int, b: Int) = a * b
 
 fun main() {
     val birthYear = 2000
@@ -75,4 +83,6 @@ fun main() {
     if (obj is String) {
         println("Safe Cast as?: ${obj.length} ____str $str")
     }
+    //Function
+
 }
